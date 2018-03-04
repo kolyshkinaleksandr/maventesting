@@ -15,6 +15,20 @@
 
   <dependencies>
     <dependency>
+       <groupId>javax</groupId>
+       <artifactId>javaee-web-api</artifactId>
+       <version>7.0</version>
+       <scope>provided</scope>
+      </dependency>
+      
+      <dependency>
+       <groupId>javax.servlet</groupId>
+       <artifactId>javax.servlet-api</artifactId>
+       <version>3.0.1</version>
+       <scope>provided</scope>
+      </dependency>
+  
+    <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
       <version>4.11</version>
@@ -37,6 +51,53 @@
     <finalName>TestingMaven</finalName>
 
   <plugins>
+  
+      <plugin>
+       <groupId>com.heroku.sdk</groupId>
+       <artifactId>heroku-maven-plugin</artifactId>
+       <version>2.0.3</version>
+       <configuration>
+        <appName>kolyshkin</appName>
+        <processTypes>
+         <web>java $JAVA_OPTS -cp target/classes:target/dependency/* Main</web>
+        </processTypes>
+       </configuration>
+      </plugin>
+      
+      <plugin>
+       <groupId>org.apache.maven.plugins</groupId>
+       <artifactId>maven-war-plugin</artifactId>
+       <version>3.0.0</version>
+       <configuration>
+         <warSourceDirectory>WebContent</warSourceDirectory>
+         <failOnMissingWebXml>false</failOnMissingWebXml>
+         <webappDirectory>${project.build.directory}/${project.artifactId}</webappDirectory>
+         <warName>${project.artifactId}</warName>
+       </configuration>
+      </plugin>
+      
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <version>3.0.2</version>
+        <executions>
+         <execution>
+          <phase>package</phase>
+          <goals><goal>copy</goal></goals>
+          <configuration>
+           <artifactItems>
+            <artifactItem>
+             <groupId>com.github.jsimone</groupId>
+             <artifactId>webapp-runner</artifactId>
+             <version>8.5.27.0</version>
+             <destFileName>webapp-runner.jar</destFileName>
+            </artifactItem>
+           </artifactItems>
+          </configuration>         
+         </execution>
+        </executions>      
+      </plugin>
+  
    <plugin>
     <groupId>org.apache.maven.plugins</groupId>
     <artifactId>maven-compiler-plugin</artifactId>
